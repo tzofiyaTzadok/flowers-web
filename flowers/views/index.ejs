@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<% include partials/head %>
+	</head>
+	<body onload="onLoad()">
+		<header>
+			<% include partials/header %>
+		</header>
+		<main>
+			<div id="content"></div>
+			<!-- Modal HTML -->
+			<div id="myModal" class="modal fade">
+				<div class="modal-dialog modal-login">
+					<div class="modal-content">
+						<div class="modal-header">
+							<h4 class="modal-title">Login</h4>
+							<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+						</div>
+						<div class="modal-body">
+							<form>
+								<div class="form-group">
+									<input type="text" class="form-control" id="uname" name="username" placeholder="Username" required="required">
+								</div>
+								<div class="form-group">
+									<input type="password" class="form-control" id="psw" name="password" placeholder="Password" required="required">
+								</div>
+								<div class="form-group">
+									<button id="login" type="button" class="btn btn-primary btn-lg btn-block login-btn" onclick="confirmLogin()">Login</button>
+								</div>
+								<div class="modal-login-link-div">
+									<div class="form-group">
+										<a href="#resetPasswordModal" class="modal-login-link forgot-password" data-toggle="modal">Forgot password?</a>
+									</div>
+									<div class="form-group">
+										<a href="#signUpModal" class="modal-login-link signup" data-toggle="modal">Sign up</a>
+									</div>
+								</div>
+							</form>
+						</div>
+					</div>
+				</div>
+			</div>
+			
+			<div id="statusModal" class="modal fade">
+				<div class="modal-dialog modal-login">
+					<div class="modal-content">
+						<div class="modal-header text-center">
+							<h4 class="modal-title">Please wait...</h4>
+							<i class='fa fa-spinner fa-spin' style='font-size:48px; padding:30px;'></i>
+						</div>
+					</div>
+				</div>
+			</div>
+			
+			<div id="resetPasswordModal" class="modal fade">
+				<div class="modal-dialog modal-login">
+					<div class="modal-content">
+						<div class="modal-header">
+							<h4 class="modal-title">Reset Password</h4>
+							<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+						</div>
+						<div class="modal-body">
+							<form>
+								<div class="form-group">
+								<div class="input-group">
+									<span class="input-group-addon"><i class="glyphicon glyphicon-envelope color-blue"></i></span>
+									<input id="mailForSendPasswordInput" name="mailForSendPasswordInput" placeholder="email address" class="form-control"  type="email">
+								</div>
+								</div>
+								<div class="form-group">
+									<button id="resetPasswordButton" type="button" class="btn btn-primary btn-lg btn-block login-btn" onclick="resetPassword()">Reset Password</button>
+								</div>
+							</form>
+						</div>
+					</div>
+				</div>
+			</div>
+			
+			<div id="signUpModal" class="modal fade">
+				<div class="modal-dialog modal-login">
+					<div class="modal-content">
+						<div class="modal-header">
+							<h4 class="modal-title">Sign Up</h4>
+							<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+						</div>
+						<div class="modal-body">
+						<form>
+							<div class="form-group">
+								<input type="text" class="form-control" id="userNameUserSignUp" name="userNameUserSignUp" placeholder="User name" required="required" autofocus>
+							</div>
+							<div class="form-group">
+								<input type="text" class="form-control" id="passwordUserSignUp" name="passwordUserSignUp" placeholder="Password" required="required" style="text-security:disc; -webkit-text-security:disc;">
+							</div>
+							<div class="form-group">
+								<input type="text" class="form-control" id="firstNameUserSignUp" name="firstNameUserSignUp" placeholder="First Name" required="required">
+							</div>
+							<div class="form-group">
+								<input type="text" class="form-control" id="lastNameUserSignUp" name="lastNameUserSignUp" placeholder="Last Name" required="required">
+							</div>
+							<div class="form-group">
+								<input type="text" class="form-control" id="streetAndNumberAddressUserSignUp" name="streetAndNumberAddressUserSignUp" placeholder="Street Name and House Number" required="required">
+							</div>
+							<div class="form-group">
+								<input type="text" class="form-control" id="cityAddressUserSignUp" name="cityAddressUserSignUp" placeholder="City" required="required">
+							</div>
+							<div class="form-group">
+								<input type="text" class="form-control" id="stateAddressUserSignUp" name="stateAddressUserSignUp" placeholder="State" required="required">
+							</div>
+							<div class="form-group">
+								<input type="tel" class="form-control" id="phoneNumberUserSignUp" name="phoneNumberUserSignUp" placeholder="Phone Number" required="required"
+								pattern="[0-9]{3}-[0-9]{7}">
+							</div>
+							<div class="form-group">
+								<input type="text" class="form-control" id="mailAddressUserSignUp" name="mailAddressUserSignUp" placeholder="Mail Address" required="required">
+							</div>
+							<div class="form-group">
+								<button id="signUpUserButton" type="button" class="btn btn-primary btn-lg btn-block login-btn" onclick="signUpUser()">Sign Up</button>
+							</div>
+						</form>
+					</div>
+					</div>
+				</div>
+			</div>
+			
+			<div id="timeoutErrorModal" class="modal fade">
+				<div class="modal-dialog modal-login">
+					<div class="modal-content">
+						<div class="modal-header text-center">
+							<h4 class="modal-title">Timeout Error</h4>
+							<br>
+							<p>please press to refresh page</p>
+							<br>
+							<a class="icon">
+								<i class="fa fa-refresh" title="refresh" onclick="window.location.reload()"></i>
+							</a>
+						</div>
+					</div>
+				</div>
+			</div>
+			
+			<div id="addFlowerModal" class="modal fade">
+				<div class="modal-dialog modal-login">
+					<div class="modal-content">
+						<div class="modal-header">
+							<h4 class="modal-title">Add Flower</h4>
+							<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+						</div>
+						<div class="modal-body">
+							<form id="addFlowerForm" enctype="multipart/form-data" onsubmit="addFlower()">
+								<div class="form-group">
+									<input type="text" class="form-control" id="nameFlower" name="nameFlower" placeholder="Name" required="required" autofocus>
+								</div>
+								<div class="form-group">
+									<input type="text" class="form-control" id="colorFlower" name="colorFlower" placeholder="Color" required="required">
+								</div>
+								<div class="form-group">
+									<input type="radio" id="fileRadio" name="fileOrLink" value="file" onclick="fileOrUrl(this.value)" checked> Upload Image From PC<br>
+									<input type="radio" id="linkRadio" name="fileOrLink" value="url" onclick="fileOrUrl(this.value)"> Upload Image with URL
+								</div>
+								<div class="form-group">
+									<input type="file" class="form-control" id="imageFlower" name="imageFlower" placeholder="Image" required="required">
+								</div>
+								<div class="form-group">
+									<input type="text" class="form-control" id="imageLinkFlower" name="imageLinkFlower" placeholder="Image URL" required="required" disabled>
+								</div>
+								<div class="form-group">
+									<input type="number" class="form-control" id="priceFlower" name="priceFlower" placeholder="Price" required="required">
+								</div>
+								<div class="form-group">
+									<button id="addFlowerButton" type="submit" class="btn btn-primary btn-lg btn-block login-btn" >Add</button>
+								</div>
+							</form>
+						</div>
+					</div>
+				</div>
+			</div>
+			
+			<div id="updateMeModal" class="modal fade">
+			<div class="modal-dialog modal-login">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h4 class="modal-title" style="font-size: 28px;">Update My Details</h4>
+						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+					</div>
+					<div class="modal-body">
+						<form>
+							<div class="form-group">
+								<input type="text" class="form-control" id="userNameUpdateMe" name="userNameUpdateMe" placeholder="User name" required="required" autofocus>
+							</div>
+							<div class="form-group">
+								<input type="text" class="form-control" id="passwordUpdateMe" name="passwordUpdateMe" placeholder="Password" required="required" style="text-security:disc; -webkit-text-security:disc;">
+							</div>
+							<div class="form-group">
+								<input type="text" class="form-control" id="firstNameUpdateMe" name="firstNameUpdateMe" disabled>
+							</div>
+							<div class="form-group">
+								<input type="text" class="form-control" id="lastNameUpdateMe" name="lastNameUpdateMe" disabled>
+							</div>
+							<div class="form-group">
+								<input type="text" class="form-control" id="streetAndNumberAddressUpdateMe" name="streetAndNumberUpdateMe" placeholder="Street Name and House Number" required="required">
+							</div>
+							<div class="form-group">
+								<input type="text" class="form-control" id="cityAddressUpdateMe" name="cityAddressUpdateMe" placeholder="City" required="required">
+							</div>
+							<div class="form-group">
+								<input type="text" class="form-control" id="stateAddressUpdateMe" name="stateAddressUpdateMe" placeholder="State" required="required">
+							</div>
+							<div class="form-group">
+								<input type="tel" class="form-control" id="phoneNumberUpdateMe" name="phoneNumberUpdateMe" placeholder="Phone Number" required="required"
+								pattern="[0-9]{3}-[0-9]{7}">
+							</div>
+							<div class="form-group">
+								<input type="text" class="form-control" id="mailAddressUpdateMe" name="mailAddressUpdateMe" placeholder="Mail Address" required="required">
+							</div>
+							<div class="form-group">
+								<button id="updateMeButton" type="button" class="btn btn-primary btn-lg btn-block login-btn" onclick="updateMe()">Update</button>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+		</main>
+		<footer>
+			<% include partials/footer %>
+		</footer>
+	</body>
+</html>

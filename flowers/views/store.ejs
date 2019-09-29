@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+  </head>
+  <body>
+  <div class="container-fluid bg-grey">
+        <section class="container content-section">
+            <div class="shop-items">
+			<% for (var i = 0; i < flowersArray.length; i++) { %>
+				<div class="card">
+                        <div id="itemCard" class="card-image">
+                            <img class="shop-item-image" src="data:<%= flowersArray[i].imageContentType %>;base64,<%= flowersArray[i].imageData %>"/>
+                            <span class="card-title"><%= flowersArray[i].name %></span>
+                            <a href="#store" id="addToCartButton" class="float" 
+								onclick="addToCart('<%= productsArray.length %>', '<%= flowersArray[i].name %>', '<%= flowersArray[i].color %>', '<%= flowersArray[i].price %>',  '<%= flowersArray[i].imageContentType %>', '<%= flowersArray[i].imageData %>', 'data:<%= flowersArray[i].imageContentType %>;base64,<%= flowersArray[i].imageData %>')">
+								<i class="fa fa-plus my-float"></i>
+							</a>
+                        </div>
+
+                        <div class="card-content">
+							<p><b>Color:</b><%= " " + flowersArray[i].color %></p>
+                            <p id="itemPrice"><b>Price:</b><%= " " + flowersArray[i].price + "$" %></p>
+                        </div>
+                 </div>
+			<% } %>
+			</div>
+        </section>
+		<br/>
+		<br/>
+		<br/>
+		<br/>
+        <section class="container content-section">
+            <h2 class="section-header">MY CART <i class="fa fa-shopping-cart" style="font-size:36px"></i></h2>
+			<br/>
+			<br/>
+            <div class="cart-row">
+                <span class="cart-item cart-header cart-column">ITEM</span>
+                <span class="cart-price cart-header cart-column">PRICE</span>
+                <span class="cart-quantity cart-header cart-column">QUANTITY</span>
+            </div>
+            <div class="cart-items">
+				<% for (var i = 0; i < productsArray.length; i++) { %>
+					<div class="cart-row">
+						<div class="cart-item cart-column">
+							<img class="cart-item-image" src="data:<%= productsArray[i].imageContentType %>;base64,<%= productsArray[i].imageData %>" width="100" height="100">
+							<span class="cart-item-title"><%= productsArray[i].name %></span>
+						</div>
+						<span class="cart-price cart-column"><%= productsArray[i].price %>$</span>
+						<div class="cart-quantity cart-column">
+							<input id="input<%= i %><%= productsArray[i].name %>" class="cart-quantity-input" type="number" 
+								onchange="quantityChanged('input<%= i %><%= productsArray[i].name %>', '<%= productsArray[i].name %>', 
+								'data:<%= productsArray[i].imageContentType %>;base64,<%= productsArray[i].imageData %>',
+								'<%= productsArray[i].imageContentType %>', '<%= productsArray[i].imageData %>')" 
+								value="<%= productsArray[i].quantity %>">
+							<button id="button<%= i %><%= productsArray[i].name %>" class="btn btn-danger" type="button" 
+								onclick="removeCartItem('button<%= i %><%= productsArray[i].name %>', '<%= productsArray[i].name %>','data:<%= productsArray[i].imageContentType %>;base64,<%= productsArray[i].imageData %>','<%= productsArray[i].imageContentType %>', '<%= productsArray[i].imageData %>')">REMOVE</button>
+						</div>`
+					</div>
+				<% } %>
+            </div>
+            <div class="cart-total">
+                <strong class="cart-total-title">Total</strong>
+                <span class="cart-total-price"><%= total %>$</span>
+            </div>
+            <button id="buttonPur" class="btn btn-primary btn-purchase" type="button" onclick="purchaseClicked(<%= JSON.stringify(productsArray) %>)">PURCHASE</button>
+        </section>
+		</div>
+    </body>
+</html>

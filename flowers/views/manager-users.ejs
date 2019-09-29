@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<script type="text/javascript">
+		$('.flip').hover(function(){
+		$(this).find('.card').toggleClass('flipped');
+		});
+		</script>
+	</head>
+	<body>
+		<div class="container-fluid">
+			<div class="title">
+				<h1>Our Users</h1>
+				<a href="#addUserModal" class="icon" data-toggle="modal">
+					<i class="fa fa-user-plus" title="add new user"></i>
+				</a>
+				<a href="#users" class="icon">
+					<i class="fa fa-refresh" title="refresh" onclick="loadUsers()"></i>
+				</a>
+			</div>
+			<div class="row">
+				<% usersArray.forEach(function(user) { %>
+				<div class="col-sm-3">
+					<div class="flip">
+						<div class="card">
+							<div class="face front">
+								<div class="inner card-header">
+									<img id="user-img" src="images/aster.jpg"></img>
+									<h3 class="card-title"><%= user.name.firstName + " " + user.name.lastName %></h3>
+									<h5 class="text-muted"><%= user.userCategory %></h5>
+								</div>
+							</div>
+							<div class="face back">
+								<div class="inner">
+									<h5><%= user.address.streetAddress + ", " + user.address.city + ", " + user.address.state %></h5>
+									<h5><%= user.mailAddress %></h5>
+									<h5><%= user.phoneNumber %></h5>
+									<h6><strong>User Name: </strong><%= user.username %></h6>
+									<h6><strong>Password: </strong><%= user.password %></h6>
+									<h6><strong>Branch Number: </strong><%= user.branchNumber == "null" ? "---" : user.branchNumber %></h6>
+									<a href="#updateUserModal" class="card-link" data-toggle="modal" data-username-id="<%= user.username %>"
+										data-password-id="<%= user.password %>"
+										data-first-id="<%= user.name.firstName %>"
+										data-last-id="<%= user.name.lastName %>"
+										data-street-id="<%= user.address.streetAddress %>"
+										data-city-id="<%= user.address.city %>"
+										data-state-id="<%= user.address.state %>"
+										data-phone-id="<%= user.phoneNumber %>"
+										data-mail-id="<%= user.mailAddress %>"
+										data-category-id="<%= user.userCategory %>"
+										data-branch-id="<%= user.branchNumber == "null" ? "---" : user.branchNumber %>">
+										<i class="fa fa-edit" title="update user details"></i>
+									</a>
+									<a href="#deleteUserModal" class="card-link" data-toggle="modal" data-first-id="<%= user.name.firstName %>"
+										data-last-id="<%= user.name.lastName %>">
+										<i class="fa fa-trash" title="delete user"></i>
+									</a>
+									<a href="#ChangeStatusUserModal" class="card-link" data-toggle="modal" data-first-id="<%= user.name.firstName %>"
+										data-last-id="<%= user.name.lastName %>">
+										<i class="fa fa-vcard" title="change status"></i>
+									</a>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<% }); %>
+			</div>
+		</div>
+		<!-- Modal HTML -->
+		<div id="addUserModal" class="modal fade">
+			<div class="modal-dialog modal-login">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h4 class="modal-title">Add User</h4>
+						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+					</div>
+					<div class="modal-body">
+						<form>
+							<div class="form-group">
+								<input type="text" class="form-control" id="userNameUser" name="userNameUser" placeholder="User name" required="required" autofocus>
+							</div>
+							<div class="form-group">
+								<input type="text" class="form-control" id="passwordUser" name="passwordUser" placeholder="Password" required="required" style="text-security:disc; -webkit-text-security:disc;">
+							</div>
+							<div class="form-group">
+								<input type="text" class="form-control" id="firstNameUser" name="firstNameUser" placeholder="First Name" required="required">
+							</div>
+							<div class="form-group">
+								<input type="text" class="form-control" id="lastNameUser" name="lastNameUser" placeholder="Last Name" required="required">
+							</div>
+							<div class="form-group">
+								<input type="text" class="form-control" id="streetAndNumberAddressUser" name="streetAndNumberAddressUser" placeholder="Street Name and House Number" required="required">
+							</div>
+							<div class="form-group">
+								<input type="text" class="form-control" id="cityAddressUser" name="cityAddressUser" placeholder="City" required="required">
+							</div>
+							<div class="form-group">
+								<input type="text" class="form-control" id="stateAddressUser" name="stateAddressUser" placeholder="State" required="required">
+							</div>
+							<div class="form-group">
+								<input type="tel" class="form-control" id="phoneNumberUser" name="phoneNumberUser" placeholder="Phone Number" required="required"
+								pattern="[0-9]{3}-[0-9]{7}">
+							</div>
+							<div class="form-group">
+								<input type="text" class="form-control" id="mailAddressUser" name="mailAddressUser" placeholder="Mail Address" required="required">
+							</div>
+							<div class="form-group">
+								<select name="userCategory" id="userCategory" class="form-control" onchange="showBranchNumberSelect.call(this, event)">
+									<option selected disabled>User Type</option>
+									<option value="customer">Customer</option>
+									<option value="worker">Worker</option>
+									<option value="manager">Manager</option>
+									<option value="supplier">Supplier</option>
+								</select>
+							</div>
+							<div class="form-group">
+								<select name="branchNumberSelect" id="branchNumberSelect" class="form-control" style="display: none;">
+									<option selected disabled>Branch Number</option>
+								</select>
+							</div>
+							<div class="form-group">
+								<button id="addUserButton" type="button" class="btn btn-primary btn-lg btn-block login-btn" onclick="addUser()">Add</button>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+		
+		<div id="updateUserModal" class="modal fade">
+			<div class="modal-dialog modal-login">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h4 class="modal-title">Update User</h4>
+						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+					</div>
+					<div class="modal-body">
+						<form>
+							<div class="form-group">
+								<input type="text" class="form-control" id="userNameUserUpdate" name="userNameUser" placeholder="User name" required="required" autofocus>
+							</div>
+							<div class="form-group">
+								<input type="text" class="form-control" id="passwordUserUpdate" name="passwordUser" placeholder="Password" required="required" style="text-security:disc; -webkit-text-security:disc;">
+							</div>
+							<div class="form-group">
+								<input type="text" class="form-control" id="firstNameUserUpdate" name="firstNameUser" disabled>
+							</div>
+							<div class="form-group">
+								<input type="text" class="form-control" id="lastNameUserUpdate" name="lastNameUser" disabled>
+							</div>
+							<div class="form-group">
+								<input type="text" class="form-control" id="streetAndNumberAddressUserUpdate" name="streetAndNumberAddressUser" placeholder="Street Name and House Number" required="required">
+							</div>
+							<div class="form-group">
+								<input type="text" class="form-control" id="cityAddressUserUpdate" name="cityAddressUser" placeholder="City" required="required">
+							</div>
+							<div class="form-group">
+								<input type="text" class="form-control" id="stateAddressUserUpdate" name="stateAddressUser" placeholder="State" required="required">
+							</div>
+							<div class="form-group">
+								<input type="tel" class="form-control" id="phoneNumberUserUpdate" name="phoneNumberUser" placeholder="Phone Number" required="required"
+								pattern="[0-9]{3}-[0-9]{7}">
+							</div>
+							<div class="form-group">
+								<input type="text" class="form-control" id="mailAddressUserUpdate" name="mailAddressUser" placeholder="Mail Address" required="required">
+							</div>
+							<div class="form-group">
+								<button id="updateUserButton" type="button" class="btn btn-primary btn-lg btn-block login-btn" onclick="updateUser()">Update</button>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+		
+		<div id="deleteUserModal" class="modal fade">
+			<div class="modal-dialog modal-login">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h4 class="modal-title">Delete User</h4>
+						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+					</div>
+					<div class="modal-body">
+						<form>
+							<div class="form-group">
+								Are you sure you want to delete this user?<br><br>
+								<button id="deleteUserButton" type="button" class="btn btn-primary btn-lg btn-block login-btn" onclick="deleteUser()">Delete</button>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+		
+		<div id="ChangeStatusUserModal" class="modal fade">
+			<div class="modal-dialog modal-login">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h4 class="modal-title">Change status of user</h4>
+						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+					</div>
+					<div class="modal-body">
+						<form>
+							<div class="form-group">
+								<select name="userCategoryChangeStatus" id="userCategoryChangeStatus" class="form-control" onchange="showBranchNumberSelectChangeStatus.call(this, event)">
+									<option selected disabled>User Type</option>
+									<option value="customer">Customer</option>
+									<option value="worker">Worker</option>
+									<option value="manager">Manager</option>
+									<option value="supplier">Supplier</option>
+								</select>
+							</div>
+							<div class="form-group">
+								<select name="branchNumberSelectChangeStatus" id="branchNumberSelectChangeStatus" class="form-control" style="display: none;">
+									<option selected disabled>Branch Number</option>
+								</select>
+							</div>
+							<div class="form-group">
+								<button id="changeStatusUserButton" type="button" class="btn btn-primary btn-lg btn-block login-btn" onclick="changeStatusUser()">Change</button>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+	</body>
+</html>

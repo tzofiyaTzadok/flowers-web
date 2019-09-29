@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <script>
+    $(document).ready(function () {
+    var socket = io();
+    socket.emit('username', '<%= user_name %>');
+    $('form').submit(function(){
+    let msg = {msg:$('#m').val(), date:new Date($.now())};
+    socket.emit('chat message', msg);
+    $('#m').val('');
+    return false;
+    });
+    socket.on('chat message', function(data){
+    if(data.username != '<%= user_name %>') {
+    $('#chat').prepend(`<div class="message message-left">
+      <h4 class="message-title">` + data.username + `</h4>
+      <p>` + data.msg + `</p>
+      <span class="time-left">` + new Date(data.date).toLocaleString('en-US') + `</span>
+    </div>
+    `);
+    }
+    else {
+    $('#chat').prepend(`<div class="row message message-right">
+      <div class="col-sm-11">
+        <p>` + data.msg +`</p>
+        <span class="time-right">` + data.date.toLocaleString('en-US') + `</span>
+      </div>
+      <div class="col-sm-1">
+        <img class="message-img" src="images/aster.jpg">
+      </div>
+    </div>
+    `);
+    }
+    });
+    });
+    </script>
+  </head>
+  <body id="myPage" data-target=".navbar" data-offset="60">
+    <div class="container-fluid">
+      <h2>Our Chat</h2>
+      <h4>You welcome to write here comments, questions and any thoughts you have about our website!</h4>
+      <h4>Scroll down to see older messages</h4>
+      
+      <form action="">
+        <input id="m" autocomplete="off" class="well well-sm col-sm-8 message-send"
+        placeholder="Type your text here..." />
+        <button class="well well-sm">
+        <span class="glyphicon glyphicon-send send-img" aria-hidden="true"></span>
+        </button>
+      </form>
+      <hr>
+      
+      <div id="chat">
+        <% messages.forEach(function(message) { %>
+        <% if (message.username == user_name) { %>
+        <div class="row message message-right">
+          <div class="col-sm-11">
+            <p> <%= message.msg %> </p>
+            <span class="time-right"> <%= new Date(message.date).toLocaleString('en-US') %> </span>
+          </div>
+          <div class="col-sm-1">
+            <img class="message-img" src="images/aster.jpg">
+          </div>
+        </div>
+        <% } else { %>
+        <div class="message message-left">
+          <h4 class="message-title"><%= message.username %></h4>
+          <p><%= message.msg %></p>
+          <span class="time-left"> <%= new Date(message.date).toLocaleString('en-US') %></span>
+        </div>
+        <% } %>
+        <% }); %>
+      </div>
+      
+    </div>
+  </body>
+</html>

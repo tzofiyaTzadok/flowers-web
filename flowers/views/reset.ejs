@@ -1,0 +1,109 @@
+<link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+<!DOCTYPE html>
+<html>
+<body>
+<div class="container">
+<div class="row">
+	<div class="col-xs-8 col-sm-8 col-md-8 col-lg-8">	
+	<h2 style="color:#c18de2;"><strong><br/>Reset Password</strong></h2>
+	
+	<hr>
+	
+		<form>
+			<div class="form-group">
+				<input type="password" class="form-control" id="newPasswordResetPassword" name="newPasswordResetPassword" placeholder="New password">
+			</div>
+            <div class="form-group">
+                <input type="password" class="form-control" name="confirmNewPasswordResetPassword" id="confirmNewPasswordResetPassword" placeholder="Confirm password"
+				onkeyup="checkPassword()">
+            </div>
+			<div class="form-group">
+                <label id="pwmatch" name="pwmatch" style="display: none; color: #FF0000;">Passwords don't match</label>
+            </div>
+            <button class="btn btn-primary" id="updatePasswordButton" style="background:#c18de2; border: none;" onclick="updatePassword()" disabled>Update Password</button>
+			
+			<hr>
+			
+			<div class="form-group">
+                <label id="failureLabel" name="failureLabel" style="display: none; color: red; font-size: 18px;">Password reset was failed</label>
+            </div>
+			<div class="form-group">
+                <label id="successLabel" name="successLabel" style="display: none; color: green; font-size: 18px;">Password reset was successful</label>
+            </div>
+		</form>
+	</div>
+</div>
+</div>
+
+</body>
+</html>
+<script src="/javascripts/jsencrypt.min.js"></script>
+
+<script>
+let pub_key = `
+-----BEGIN PUBLIC KEY-----
+MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDLHM2elMflhv6vysqwT34s6wd5
+zDYazXVyX4YEjhwBMhG5e/WPB8FfRZRt5o4Zw2WoMbybBcr3wTX0tjGtDGvB5y/F
+Ab9GKLXQTR9r+95nIYFMm3215yan9I79vXybtd8ddM1anME0VVBVcmZSap7giyAX
+JGq368VZ9k4rwyIvBwIDAQAB
+-----END PUBLIC KEY-----
+`
+
+function encrypt(str) {
+    var crypt = new JSEncrypt();
+    crypt.setKey(pub_key)
+    return crypt.encrypt(str);
+}
+
+function encrypt(str) {
+    var crypt = new JSEncrypt();
+    crypt.setKey(pub_key)
+    return crypt.encrypt(str);
+}
+
+async function checkPassword() {
+	if (document.getElementById("newPasswordResetPassword").value != document.getElementById("confirmNewPasswordResetPassword").value) {
+		document.getElementById("pwmatch").style.display = "block";
+		document.getElementById("updatePasswordButton").disabled = true;
+	} else {
+		document.getElementById("pwmatch").style.display = "none";
+		document.getElementById("updatePasswordButton").disabled = false;
+	}
+}
+
+async function updatePassword() {
+	let pass = document.getElementById("newPasswordResetPassword").value;
+	let confirmPass = document.getElementById("confirmNewPasswordResetPassword").value;
+	let tokenParam = window.location.href.substr(window.location.href.indexOf('reset/') + 6);
+	let user = {
+        password: encrypt(pass),
+		token: tokenParam
+    };
+    let x = JSON.stringify(user);
+	try {
+		let res = null;
+        res = await fetch('/updatePassword', {
+            method: 'POST',
+            body: x,
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json; charset=utf-8'
+            }
+        });
+		if (res.status == 200) {
+			document.getElementById("successLabel").style.display = "block";
+			let url = "/";
+    		window.history.replaceState(null, null, url);
+			/*setTimeout((function() {
+							window.close();
+			}), 4000);*/
+        } else if (res.status == 404)
+            document.getElementById("failureLabel").style.display = "block";
+			setTimeout((function() {
+							window.close();
+			}), 4000);
+	} catch (error) {
+        alert("error");
+    }
+}
+</script>
