@@ -8,7 +8,7 @@
     "clear": "node cleardb.js"
   },
   "dependencies": {
-    "async": "^3.1.0",
+    "async": "^3.2.2",
     "connect-mongo": "^2.0.3",
     "cookie-parser": "^1.4.4",
     "crypto": "^1.0.1",
